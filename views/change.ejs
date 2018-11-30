@@ -3,7 +3,7 @@
     <h1>Modify Restaruant: <%= restaurants[0].name %></h1>
     <%_ if (g) { %>
     <form action="/change?_id=<%= restaurants[0]._id %>" method="post" enctype="multipart/form-data">
-        Name: <input type="text" name="name" value="<%= restaurants[0].name %>"><br>
+        Name: <input type="text" name="name" value="<%= restaurants[0].name %>" required><br>
         Borough: <input type="text" name="borough" value="<%= restaurants[0].borough %>"><br>
 		Cuisine: <input type="text" name="cuisine" value="<%= restaurants[0].cuisine %>"><br>
         Street: <input type="text" name="street" value="<%= restaurants[0].address[0].street %>"><br>
