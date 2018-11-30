@@ -108,84 +108,85 @@ app.post('/register', function (req, res) {
 
 //create new restaurant
 app.get('/create', function (req, res) {
-	//res.sendFile(__dirname + '/public/create.html')
-	res.render('create.ejs');
-})
-
-app.post('/create', function (req, res) {
 	if (!req.session.authenticated) {
 		res.redirect('/login');
 	} else {
-		if (req.url == '/create' && req.method.toLowerCase() == 'post') {
-			var form = new formidable.IncomingForm();
-			console.log("About to parse...");
-			form.parse(req, function (err, fields, files) {
-				if (err) {
-					console.log(err);
-				}
-				console.log("Parsing done.");
-				// console.log(fields);
-				// console.log(files);
-				mongoose.connect(mongourl, { useNewUrlParser: true });
-				//mongoose.createConnection(mongourl)	
-				var restaurantsSchema = require('./model/restaurants');
-				var db = mongoose.connection;
-				var name = fields.name;
-				var borough = fields.borough;
-				var cuisine = fields.cuisine;
-				var street = fields.street;
-				var building = fields.building;
-				var zipcode = fields.zipcode;
-				var lat = fields.lat;
-				var lon = fields.lon;
-				var filename = files.photo.path;
-				var mimetype = "";
-				var photo = "";
-				if (files.photo.type) {
-					mimetype = files.photo.type;
-				}
-				fs.readFile(filename, function (err, data) {
-					photo = new Buffer(data).toString('base64');
-				})
-				db.on('error', console.error.bind(console, 'connection error:'));
-				db.once('open', function (callback) {
-					var Restaurants = mongoose.model('Restaurants', restaurantsSchema)
-					var newRestaurant = new Restaurants({
-						name: name, borough: borough,
-						cuisine: cuisine,
-						photoMimetype: mimetype,
-						photo: photo,
-						address: [{
-							street: street, building: building,
-							zipcode: zipcode, coord: [{ lat: lat, lon: lon }]
-						}],
-						owner: req.session.username
-					})
-
-					console.log(typeof newRestaurant);
-
-					newRestaurant.validate(function (err) {
-						console.log(err);
-					})
-
-					newRestaurant.save(function (err, documentInserted) {
-						if (err) {
-							res.writeHead(200, { 'Content-Type': 'application/json' });
-							res.write(JSON.stringify({ status: 'failed' }));
-							db.close();
-						} else {
-							console.log('Restaurants created!')
-							res.writeHead(200, { 'Content-Type': 'application/json' });
-							res.write(JSON.stringify({ status: 'ok', _id: documentInserted._id }));
-							db.close();
-						}
-					});
-				});
-
-			})
-			return
-		}
+		//res.sendFile(__dirname + '/public/create.html')
+		res.render('create.ejs');
 	}
+})
+
+app.post('/create', function (req, res) {
+	if (req.url == '/create' && req.method.toLowerCase() == 'post') {
+		var form = new formidable.IncomingForm();
+		console.log("About to parse...");
+		form.parse(req, function (err, fields, files) {
+			if (err) {
+				console.log(err);
+			}
+			console.log("Parsing done.");
+			// console.log(fields);
+			// console.log(files);
+			mongoose.connect(mongourl, { useNewUrlParser: true });
+			//mongoose.createConnection(mongourl)	
+			var restaurantsSchema = require('./model/restaurants');
+			var db = mongoose.connection;
+			var name = fields.name;
+			var borough = fields.borough;
+			var cuisine = fields.cuisine;
+			var street = fields.street;
+			var building = fields.building;
+			var zipcode = fields.zipcode;
+			var lat = fields.lat;
+			var lon = fields.lon;
+			var filename = files.photo.path;
+			var mimetype = "";
+			var photo = "";
+			if (files.photo.type) {
+				mimetype = files.photo.type;
+			}
+			fs.readFile(filename, function (err, data) {
+				photo = new Buffer(data).toString('base64');
+			})
+			db.on('error', console.error.bind(console, 'connection error:'));
+			db.once('open', function (callback) {
+				var Restaurants = mongoose.model('Restaurants', restaurantsSchema)
+				var newRestaurant = new Restaurants({
+					name: name, borough: borough,
+					cuisine: cuisine,
+					photoMimetype: mimetype,
+					photo: photo,
+					address: [{
+						street: street, building: building,
+						zipcode: zipcode, coord: [{ lat: lat, lon: lon }]
+					}],
+					owner: req.session.username
+				})
+
+				console.log(typeof newRestaurant);
+
+				newRestaurant.validate(function (err) {
+					console.log(err);
+				})
+
+				newRestaurant.save(function (err, documentInserted) {
+					if (err) {
+						res.writeHead(200, { 'Content-Type': 'application/json' });
+						res.write(JSON.stringify({ status: 'failed' }));
+						db.close();
+					} else {
+						console.log('Restaurants created!')
+						res.writeHead(200, { 'Content-Type': 'application/json' });
+						res.write(JSON.stringify({ status: 'ok', _id: documentInserted._id }));
+						db.close();
+					}
+				});
+			});
+
+		})
+		return
+	}
+
 });
 
 //Search
