@@ -1,0 +1,13 @@
+<html>
+<body>    
+    <h1>Rate Restaurant : <%= restaurants[0].name %></h1>
+    <%_ if (!g) { %>
+    <form action="/rate?_id=<%= restaurants[0]._id %>" method="post" enctype="multipart/form-data">
+        Score(1 - 10): <input type="number" name="score" min=1 max=10 value=10 required><br>
+    <input type="submit" value="Rate">
+    <%_ }else{ %>
+        <h3>You have rated this restaurant!!! </h3> 
+    <%_ } %>
+	</form>
+</body>
+</html>
