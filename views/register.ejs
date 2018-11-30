@@ -2,9 +2,13 @@
 <body>
 	<h1>Register</h1>
 	<form action="/register" method="post">
-		Username: <input type="text" name="userid"><br>
-		Password: <input type="password" name="password"><br>
+		Username: <input type="text" name="userid" required><br>
+		Password: <input type="password" name="password" required><br>
+		<% if (f) { %>
+			<h3>This username has been used!</h3>
+		<% } %>	
 	<input type="submit" value="Register">
 	</form>
+	<a href="/"><button>Home</button></a>
 </body>
 </html>

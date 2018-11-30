@@ -1,6 +1,6 @@
 <html>
 <body>    
-    <h1>Modify Restaruant <%= restaurants[0].name %></h1>
+    <h1>Modify Restaruant: <%= restaurants[0].name %></h1>
     <%_ if (g) { %>
     <form action="/change?_id=<%= restaurants[0]._id %>" method="post" enctype="multipart/form-data">
         Name: <input type="text" name="name" value="<%= restaurants[0].name %>"><br>

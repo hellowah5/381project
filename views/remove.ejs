@@ -2,11 +2,11 @@
    <head><title>Remove</title></head>
    <body>
       <h1>Remove</h1>
-      <%_ if (g) { %>
-      <h1>Delete success</h1>
-      <%_ }else{ %>
-      <h1>You are not authorized to delete!!! </h1> 
-      <%_ } %>
+      <% if (g) { %>
+      <h3>Delete success</h3>
+      <% }else{ %>
+      <h3>You are not authorized to delete!!! </h3> 
+      <% } %>
       <a href="/"><button>Home</button></a>
    </body>
 </html>

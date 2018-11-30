@@ -2,12 +2,12 @@
    <head><title>Restaurant</title></head>
    <body>
       <h1>Restaurants</h1>
-      <H3>Hello, User: <%= name %></H3>
+      <H3>Hello, <%= name %></H3>
+      <a href="/logout"><button>Logout</button></a>
       <H3>Showing <%= restaurants.length %> document(s) (criteria:<%= c %>)</H3>
-      <a href="/">Home</a>
-      <p><a href="/logout"><button>Logout</button></a></p>
-      <p><a href="/create"><button>Create New Restaurant</button></a></p>
-      <p><a href="/search"><button>Search</button></a></p>
+      <a href="/"><button>Home</button></a>  
+      <a href="/search"><button>Search</button></a> 
+      <a href="/create"><button>Create New Restaurant</button></a>      
       <ol>
             <% for ( i in restaurants) { %>
               <li><a href="/display?_id=<%= restaurants[i]._id %>"><%= restaurants[i].name %></a></li>        

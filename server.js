@@ -50,7 +50,7 @@ app.get('/', function (req, res) {
 //login
 app.get('/login', function (req, res) {
 	//res.sendFile(__dirname + '/public/login.html');
-	res.render('login.ejs');
+	res.render('login.ejs', {f:false});
 });
 
 app.post('/login', function (req, res) {
@@ -66,7 +66,8 @@ app.post('/login', function (req, res) {
 					res.redirect('/')
 				} else {
 					console.log('Invalid username or password')
-					res.redirect('/')
+					//res.redirect('/')
+					res.render('login.ejs',{f: true});
 				}
 			}
 			db.close()
@@ -77,7 +78,7 @@ app.post('/login', function (req, res) {
 //register
 app.get('/register', function (req, res) {
 	//res.sendFile(__dirname + '/public/register.html')
-	res.render('register.ejs');
+	res.render('register.ejs',{f: false});
 })
 
 app.post('/register', function (req, res) {
@@ -91,15 +92,18 @@ app.post('/register', function (req, res) {
 			if (result === null) {
 				db.collection("users").insertOne(userData, function (err, res) {
 					if (err) throw err
-					console.log("Registration completed!")
+					console.log("Registration completed!");
+					
 				})
+				res.redirect('/');
 			} else {
 				console.log('This username has been used!')
+				res.render('register.ejs',{f: true});
 			}
 			db.close()
 		})
 	})
-	res.redirect('/');
+	
 })
 
 //create new restaurant
@@ -185,55 +189,26 @@ app.get('/search', function (req, res) {
 	res.render('search', {});
 });
 
-// app.post('/search', function(req,res){
-// 	if (!req.session.authenticated) {
-// 		res.redirect('/login')
-// 	} else {
-// 		MongoClient.connect(mongourl, function (err, db) {
-// 			try {
-// 				assert.equal(err, null);
-// 			} catch (err) {
-// 				res.set({ "Content-Type": "text/plain" });
-// 				res.status(500).end("MongoClient connect() failed!");
-// 			}
-// 			console.log('Connected to MongoDB');
-// 			findRestaurants(db, {}, function (restaurants) {
-// 				db.close();
-// 				console.log("Showing " + restaurants.length + " document(s)");
-// 				console.log('Disconnected MongoDB\n');
-// 				res.render('list.ejs', { name: req.session.username, restaurants: restaurants, c: "{}" });
-// 			});
-// 		});
-// 	}
-// })
-
-app.post('/search', function (req, res) {
+app.get('/searchBy', function (req, res) {
 	MongoClient.connect(mongourl, function (err, db) {
-		var name = req.body.name;
-		var borough = req.body.borough;
-		var cuisine = req.body.cuisine;
-
-		var find = {};
-		var criteria;
-		if (name != "") {
-			find.name = name;
-		}
-		if (borough != "") {
-			find.borough = borough;
-		}
-		if (cuisine != "") {
-			find.cuisine = cuisine;
-		}
-		console.log("find: " + JSON.stringify(find));
+		if(err) throw err;
+		var criteria = req.query.criteria;
+		var keywords = new RegExp(req.query.keywords, "i");
+		var find = {};	
+		var c ={};	
+		find[criteria] = keywords;
+		c[criteria] = req.query.keywords;
+		console.log(keywords);
+		console.log("Find: " + JSON.stringify(find));
 		db.collection("restaurants").find(find).toArray(function (err, result) {
-			if (err) throw err
+			if (err) throw err;
 
 			if (result.length != 0) {
 				console.log(result[0].name);
-				res.render('list.ejs', { name: req.session.username, restaurants: result, c: JSON.stringify(find)});
+				res.render('list.ejs', { name: req.session.username, restaurants: result, c: JSON.stringify(c)});
 				//res.render('landing',{msg:result});
 			} else {
-				res.render('list.ejs', { name: req.session.username, restaurants: result, c: criteria });
+				res.render('list.ejs', { name: req.session.username, restaurants: result, c: JSON.stringify(c) });
 				//res.render('landing', { msg: [{ name: 'you found nothing' }] });
 			}
 			db.close()
