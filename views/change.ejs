@@ -9,8 +9,8 @@
         Street: <input type="text" name="street" value="<%= restaurants[0].address[0].street %>"><br>
         Building: <input type="text" name="building" value="<%= restaurants[0].address[0].building %>"><br>
         Zipcode: <input type="text" name="zipcode" value="<%= restaurants[0].address[0].zipcode %>"><br>
-        GPS Coordinates (Lat.): <input type="text" name="lat" value="<%= restaurants[0].address[0].coord[0].lat %>"><br>
-        GPS Coordinates (Lon.): <input type="text" name="lon" value="<%= restaurants[0].address[0].coord[0].lon %>"><br>
+        GPS Coordinates (Lat.): <input type="number" name="lat" step="any" value="<%= restaurants[0].address[0].coord[0].lat %>"><br>
+        GPS Coordinates (Lon.): <input type="number" name="lon" step="any" value="<%= restaurants[0].address[0].coord[0].lon %>"><br>
         Photo: <input type="file" name="photo"><br>
     <input type="submit" value="Change">
     <%_ }else{ %>
