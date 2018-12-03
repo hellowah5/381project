@@ -607,6 +607,7 @@ app.post('/api/restaurant', function (req, res){
 	var owner = req.body.user
 
 	mongoose.connect(mongourl)
+	var restaurantsSchema = require('./model/restaurants');
 			var db = mongoose.connection
 			var borough = ""
 			var cuisine = ""
