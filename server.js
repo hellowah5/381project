@@ -106,7 +106,7 @@ app.post('/register', function (req, res) {
 
 })
 
-//create new restaurant
+//C new restaurant
 app.get('/create', function (req, res) {
 	if (!req.session.authenticated) {
 		res.redirect('/login');
@@ -602,6 +602,53 @@ app.get('/api/restaurant/:by/:value', function (req, res) {
 	}
 })
 
+app.post('/api/restaurant', function (req, res){
+	var name = req.body.name
+	var owner = req.body.user
+
+	mongoose.connect(mongourl)
+			var db = mongoose.connection
+			var borough = ""
+			var cuisine = ""
+			var street = ""
+			var building = ""
+			var zipcode = ""
+			var lat = ""
+			var lon = ""
+			var photoMimetype = ""
+			var photo = ""
+
+			db.on('error', console.error.bind(console, 'connection error:'))
+			db.once('open', function (callback) {
+				var Restaurant = mongoose.model('Restaurant', restaurantsSchema)
+				var newRestaurant = new Restaurant({
+					name: name, borough: borough,
+					cuisine: cuisine, photo: photo, photoMimetype: photoMimetype, address: [{
+						street: street, building: building,
+						zipcode: zipcode, coord: [{ lat: lat, lon: lon }]
+					}], owner: owner
+				})
+
+				newRestaurant.validate(function (err) {
+					console.log(err)
+				})
+
+				newRestaurant.save(function (err, restaurantCreated) {
+					if (err) {
+						res.writeHead(200, { "Content-Type": "application/json" })
+						res.write(JSON.stringify({status: 'failed'}))
+						db.close()
+					} else {
+						// console.log('new restaurant created!')
+						// res.writeHead(200, { "Content-Type": "application/json" })
+						// res.write(JSON.stringify({status: 'ok', _id: restaurantCreated._id}))
+						res.status(200).json({status: 'ok', _id: restaurantCreated._id})
+						db.close()
+					}
+
+				})
+			})
+})
 
 var test = { daniel: 123, ethan: 456, Alan: 789 };
 
