@@ -1,7 +1,7 @@
 {
-    "name": "381 project",
-    "description": "381 project",
-    "author": "Daniel, Ethan",
+    "name": "server",
+    "description": "NodeJS Session",
+    "author": "Raymond SO <rso@ouhk.edu.hk>",
     "version": "0.0.1",
     "dependencies": {
         "express": "*",
